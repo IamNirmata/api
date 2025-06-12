@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  llm_api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_ID=meta-llama/Llama-4-Scout-17B-16E-Instruct
+      - GPU_COUNT=1
+      - SSL_KEY_PATH=/certs/key.pem
+      - SSL_CERT_PATH=/certs/cert.pem
+    volumes:
+      - ./certs:/certs
+      - ./app:/app/app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
